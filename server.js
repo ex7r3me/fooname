@@ -79,6 +79,10 @@ function (token, tokenSecret, profile, cb) {
   return cb(null, profile)
 }))
 
+app.get('/',function (req, res) {
+  res.send('Welcome to fooname')
+})
+
 app.get('/login/twitter',
   passport.authenticate('twitter'))
 
