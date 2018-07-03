@@ -7,20 +7,10 @@ const Strategy = require('passport-twitter').Strategy
 const rp = require('request-promise')
 const _ = require('lodash')
 const serverPort = process.env.OPENSHIFT_NODEJS_PORT || 8080
-//const server_ip_address = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1'
+// const server_ip_address = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1'
 const baseUrl = process.env.BASE_URL || 'http://127.0.0.1:8080'
 const twitterConsumerKey = process.env.CONSUMER_KEY || ''
 const twitterConsumerSecret = process.env.CONSUMER_SECRET || ''
-passport.use(new Strategy({
-  consumerKey: twitterConsumerKey,
-  consumerSecret: twitterConsumerSecret,
-  callbackURL: `${baseUrl}/login/twitter/return`
-},
-function (token, tokenSecret, profile, cb) {
-  console.log('gonna get here')
-  return cb(null, profile)
-}))
-
 passport.serializeUser(function (user, cb) {
   cb(null, user)
 })
@@ -53,7 +43,7 @@ let weatherRequestOptions = {
 passport.use(new Strategy({
   consumerKey: twitterConsumerKey,
   consumerSecret: twitterConsumerSecret,
-  callbackURL: 'http://127.0.0.1:8080/login/twitter/return'
+  callbackURL: `${baseUrl}/login/twitter/return`
 },
 function (token, tokenSecret, profile, cb) {
   let T = new Twit({
@@ -79,7 +69,7 @@ function (token, tokenSecret, profile, cb) {
   return cb(null, profile)
 }))
 
-app.get('/',function (req, res) {
+app.get('/', function (req, res) {
   res.send('Welcome to fooname')
 })
 
