@@ -1,4 +1,3 @@
-const http = require('http')
 const Twit = require('twit')
 
 const express = require('express')
@@ -59,6 +58,7 @@ function (token, tokenSecret, profile, cb) {
     .then(function (weather) {
       let weatherStatus = _.get(weather, 'weather[0].main', '')
       T.post('account/update_profile', { name: `Smile is so ${weatherStatus}` }, (err, data, response) => {
+        if (err) { console.log(err) }
         console.log(data)
       })
     })
