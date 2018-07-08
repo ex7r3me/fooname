@@ -19,7 +19,7 @@ var passportConfigurator = new PassportConfigurator(app)
 // Build the providers/passport config
 let config = {}
 try {
-  config = require('../providers.json')
+  config = require('../providers.js')
 } catch (err) {
   console.trace(err)
   process.exit(1) // fatal
