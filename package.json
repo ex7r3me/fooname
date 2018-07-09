@@ -7,8 +7,7 @@
   },
   "scripts": {
     "lint": "eslint .",
-    "start": "node .",
-    "posttest": "npm run lint && nsp check"
+    "start": "node ."
   },
   "dependencies": {
     "compression": "^1.0.3",
