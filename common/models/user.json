@@ -2,6 +2,11 @@
   "name": "user",
   "plural": "users",
   "base": "User",
+  "properties": {
+    "cityId": {
+      "type": "number"
+    }
+  },
   "relations": {
     "accessTokens": {
       "type": "hasMany",
