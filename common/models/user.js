@@ -39,12 +39,21 @@ module.exports = function (UserModel) {
       })
     }
   }
+  UserModel.weatherCodeToEmoji = (weatherCode) => {
+    switch (weatherCode) {
+      case 500 : return '🌦️'
+      case 800 : return '☀️'
+      case 801 : return '🌤️'
+      default: return '🌵'
+    }
+  }
   UserModel.updateAllUsersStatus = () => {
     UserModel.find()
       .then((users) => {
         return Promise.all(users.map(user => {
           if (_.isNumber(user.cityId)) {
-            return UserModel.getWeatherByCityId(112931).then((weather) => {
+            return UserModel.getWeatherByCityId(user.cityId)
+              .then((weather) => {
               return {user, weather}
             })
           } else { return new Error('Invalid City ID for user') }
@@ -52,14 +61,14 @@ module.exports = function (UserModel) {
       })
       .then(results => {
         let updateUsersArray = results.map(result => {
-          return ({user: result.user, weather: _.get(result, 'weather.weather[0].description', '')})
+          return ({user: result.user, weather: _.get(result, 'weather.weather[0]', '')})
         })
         return Promise.resolve(updateUsersArray)
       })
       .then(updateObjects => {
         Promise.all(updateObjects.map(updateObject => {
           let user = updateObject.user
-          let name = updateObject.weather
+          let name = UserModel.weatherCodeToEmoji(updateObject.weather.id)
           user.identities((err, identity) => {
             let credentials = identity[0].credentials
             return UserModel.updateName(credentials, name)
