@@ -39,11 +39,26 @@ module.exports = function (UserModel) {
       })
     }
   }
-  UserModel.weatherCodeToEmoji = (weatherCode) => {
-    switch (weatherCode) {
-      case 500 : return '🌦️'
-      case 800 : return '☀️'
-      case 801 : return '🌤️'
+  UserModel.weatherIconToEmoji = (weatherIconCode) => {
+    switch (weatherIconCode) {
+      case '01d' : return '☀️'
+      case '01n' : return '🌕'
+      case '02d' : return '⛅'
+      case '02n' : return '🌕️'
+      case '03d' : return '☁️'
+      case '03n' : return '☁️'
+      case '04d' : return '☁️️'
+      case '04n' : return '☁️'
+      case '09d' : return '🌧️'
+      case '09n' : return '🌧️'
+      case '10d' : return '🌦️'
+      case '10n' : return '🌧️'
+      case '11d' : return '⛈️'
+      case '11n' : return '⛈️'
+      case '13d' : return '🌨️'
+      case '13n' : return '🌨️'
+      case '50d' : return '🌫️'
+      case '50n' : return '🌫️'
       default: return '🌵'
     }
   }
@@ -68,7 +83,7 @@ module.exports = function (UserModel) {
       .then(updateObjects => {
         Promise.all(updateObjects.map(updateObject => {
           let user = updateObject.user
-          let name = UserModel.weatherCodeToEmoji(updateObject.weather.id)
+          let name = UserModel.weatherIconToEmoji(updateObject.weather.icon)
           user.identities((err, identity) => {
             let credentials = identity[0].credentials
             return UserModel.updateName(credentials, name)
