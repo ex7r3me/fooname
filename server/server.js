@@ -10,6 +10,7 @@ var app = module.exports = loopback()
 var cookieParser = require('cookie-parser')
 var session = require('express-session')
 var flash = require('express-flash')
+let utils = require('loopback-component-passport/lib/models/utils')
 
 let bodyParser = require('body-parser')
 var loopbackPassport = require('loopback-component-passport')
@@ -48,7 +49,16 @@ app.start = function () {
 app.use(loopback.token({
   model: app.models.accessToken
 }))
-
+function customProfileToUser (provider, profile) {
+  console.log(profile)
+  let userObject = {
+    email: `${profile.username}@${provider}.fooname.ga`,
+    username: provider + '.' + profile.username,
+    baseUsername: profile.displayName,
+    password: utils.generateKey('password')
+  }
+  return userObject
+}
 boot(app, __dirname, function (err) {
   if (err) throw err
 
@@ -81,6 +91,7 @@ passportConfigurator.setupModels({
 for (let s in config) {
   let c = config[s]
   c.session = c.session !== false
+  c.profileToUser = customProfileToUser
   passportConfigurator.configureProvider(s, c)
 }
 app.get('/api/auth/account', (req, res, next) => {

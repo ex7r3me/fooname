@@ -69,8 +69,8 @@ module.exports = function (UserModel) {
           if (_.isNumber(user.cityId)) {
             return UserModel.getWeatherByCityId(user.cityId)
               .then((weather) => {
-              return {user, weather}
-            })
+                return {user, weather}
+              })
           } else { return new Error('Invalid City ID for user') }
         }))
       })
@@ -83,7 +83,8 @@ module.exports = function (UserModel) {
       .then(updateObjects => {
         Promise.all(updateObjects.map(updateObject => {
           let user = updateObject.user
-          let name = UserModel.weatherIconToEmoji(updateObject.weather.icon)
+          let baseUsername = _.isNil(user.baseUsername) ? '' : user.baseUsername
+          let name = baseUsername + UserModel.weatherIconToEmoji(updateObject.weather.icon)
           user.identities((err, identity) => {
             let credentials = identity[0].credentials
             return UserModel.updateName(credentials, name)

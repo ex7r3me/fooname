@@ -3,6 +3,9 @@
   "plural": "users",
   "base": "User",
   "properties": {
+    "baseUsername" :{
+      "type": "string"
+    },
     "cityId": {
       "type": "number"
     }
