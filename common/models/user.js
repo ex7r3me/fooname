@@ -1,4 +1,3 @@
-const request = require('request')
 const rp = require('request-promise')
 const Twit = require('twit')
 const _ = require('lodash')
@@ -86,10 +85,19 @@ module.exports = function (UserModel) {
           let baseUsername = _.isNil(user.baseUsername) ? '' : user.baseUsername
           let name = baseUsername + UserModel.weatherIconToEmoji(updateObject.weather.icon)
           user.identities((err, identity) => {
+            if (err) { console.log(err) }
             let credentials = identity[0].credentials
             return UserModel.updateName(credentials, name)
           })
         }))
       })
   }
+  UserModel.observe('before save', (ctx, next) => {
+    if (ctx.instance) {
+      ctx.instance.updateDate = new Date()
+    } else {
+      ctx.data.updateDate = new Date()
+    }
+    next()
+  })
 }
