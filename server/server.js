@@ -95,7 +95,8 @@ for (let s in config) {
   passportConfigurator.configureProvider(s, c)
 }
 app.get('/api/auth/account', (req, res, next) => {
-  res.send(req.user)
+  let accessToken = req.accessToken.id
+  res.redirect(`ga.fooname.app://login/profile/${accessToken}`)
 })
 
 // start the server if `$ node server.js`
