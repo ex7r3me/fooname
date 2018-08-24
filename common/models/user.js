@@ -17,6 +17,26 @@ module.exports = function (UserModel) {
     }
     return rp(weatherRequestOptions)
   }
+  UserModel.updateCityIdByCoordination = (lat, lon, options) => {
+    const userId = _.get(options, 'accessToken.userId', 0)
+    if (userId) {
+      return UserModel.getCityByCoordination(lat, lon)
+        .then(result => _.get(result, 'id', false))
+        .then(cityId => {
+          if (cityId) {
+            return UserModel.findById(userId).then(user => user.updateAttributes({cityId}))
+          } else { throw Error('No city found') }
+        })
+    } else {
+      return Promise.reject(new Error('No user found'))
+    }
+  }
+  UserModel.getCityByCoordination = (lat, lon) => {
+    let weatherRequestOptions = { uri: 'https://api.openweathermap.org/data/2.5/weather',
+      qs: { lat, lon, appId: openWeatherKey },
+      json: true }
+    return rp(weatherRequestOptions)
+  }
   UserModel.updateName = (credentials, name) => {
     let token = credentials.token
     let tokenSecret = credentials.tokenSecret
@@ -99,5 +119,14 @@ module.exports = function (UserModel) {
       ctx.data.updateDate = new Date()
     }
     next()
+  })
+  UserModel.remoteMethod('updateCityIdByCoordination', {
+    accepts: [
+      { arg: 'lat', type: 'number' },
+      { arg: 'lon', type: 'number' },
+      { arg: 'options', type: 'object', http: 'optionsFromRequest' }
+    ],
+    returns: { arg: 'status', type: 'boolean' },
+    http: { path: '/coordination', verb: 'patch' }
   })
 }

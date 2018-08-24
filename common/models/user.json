@@ -3,19 +3,20 @@
   "plural": "users",
   "base": "User",
   "properties": {
-    "baseUsername" :{
+    "baseUsername": {
       "type": "string"
     },
     "cityId": {
       "type": "number"
     },
-    "createDate" :{
+    "createDate": {
       "type": "Date"
     },
-    "updateDate" :{
+    "updateDate": {
       "type": "Date"
     }
   },
+  "validations": [],
   "relations": {
     "accessTokens": {
       "type": "hasMany",
@@ -33,7 +34,14 @@
       "foreignKey": "userId"
     }
   },
-  "validations": [],
-  "acls": [],
-  "methods": []
+  "acls": [
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "updateCityIdByCoordination"
+    }
+  ],
+  "methods": {}
 }
