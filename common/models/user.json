@@ -9,6 +9,9 @@
     "cityId": {
       "type": "number"
     },
+    "cityName": {
+      "type": "string"
+    },
     "createDate": {
       "type": "Date"
     },

@@ -3,7 +3,6 @@
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
 'use strict'
-
 var loopback = require('loopback')
 var boot = require('loopback-boot')
 var app = module.exports = loopback()
@@ -11,7 +10,6 @@ var cookieParser = require('cookie-parser')
 var session = require('express-session')
 var flash = require('express-flash')
 let utils = require('loopback-component-passport/lib/models/utils')
-
 let bodyParser = require('body-parser')
 var loopbackPassport = require('loopback-component-passport')
 var PassportConfigurator = loopbackPassport.PassportConfigurator

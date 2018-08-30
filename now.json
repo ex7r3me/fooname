@@ -1,0 +1,10 @@
+{
+    "env": {
+      "OPENWEATHER_KEY": "@openweather_key",
+      "CONSUMER_KEY": "@consumer_key",
+      "CONSUMER_SECRET": "@consumer_secret",
+      "BASE_URL": "https://fooname.now.sh",
+      "NODE_ENV": "production"
+    },
+    "alias": "fooname"
+  }
