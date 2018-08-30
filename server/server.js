@@ -48,7 +48,6 @@ app.use(loopback.token({
   model: app.models.accessToken
 }))
 function customProfileToUser (provider, profile) {
-  console.log(profile)
   let userObject = {
     email: `${profile.username}@${provider}.fooname.ga`,
     username: provider + '.' + profile.username,
@@ -94,7 +93,7 @@ for (let s in config) {
 }
 app.get('/api/auth/account', (req, res, next) => {
   let accessToken = req.accessToken.id
-  res.redirect(`ga.fooname.app://login/profile/${accessToken}`)
+  res.redirect(`ga.fooname.app://login/user/profile/${accessToken}`)
 })
 
 // start the server if `$ node server.js`
