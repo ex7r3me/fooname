@@ -3,6 +3,11 @@
       "OPENWEATHER_KEY": "@openweather_key",
       "CONSUMER_KEY": "@consumer_key",
       "CONSUMER_SECRET": "@consumer_secret",
+      "MONGO_HOST": "@mongo_host",
+      "MONGO_DATABASE": "@mongo_database",
+      "MONGO_USER": "@mongo_user",
+      "MONGO_PASSWORD": "@mongo_password",
+      "MONGO_PORT": "@mongo_port",
       "BASE_URL": "https://fooname.now.sh",
       "NODE_ENV": "production"
     },
