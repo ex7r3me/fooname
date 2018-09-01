@@ -71,43 +71,60 @@ module.exports = function (UserModel) {
   UserModel.weatherIconToEmoji = weatherIconCode => {
     switch (weatherIconCode) {
       case '01d':
-        return '☀️'
+        return { emoji: '☀️', shortname: 'sunny' }
       case '01n':
-        return '🌕'
+        return { emoji: '🌕', shortname: 'full_moon' }
+
       case '02d':
-        return '⛅'
+        return { emoji: '⛅', shortname: 'partly_sunny' }
+
       case '02n':
-        return '🌕️'
+        return { emoji: '🌕️', shortname: 'full_moon' }
+
       case '03d':
-        return '☁️'
+        return { emoji: '☁️', shortname: 'cloud' }
+
       case '03n':
-        return '☁️'
+        return { emoji: '☁️', shortname: 'cloud' }
+
       case '04d':
-        return '☁️️'
+        return { emoji: '☁️️', shortname: 'cloud' }
+
       case '04n':
-        return '☁️'
+        return { emoji: '☁️', shortname: 'cloud' }
+
       case '09d':
-        return '🌧️'
+        return { emoji: '🌧️', shortname: '' }
+
       case '09n':
-        return '🌧️'
+        return { emoji: '🌧️', shortname: '' }
+
       case '10d':
-        return '🌦️'
+        return { emoji: '🌦️', shortname: '' }
+
       case '10n':
-        return '🌧️'
+        return { emoji: '🌧️', shortname: '' }
+
       case '11d':
-        return '⛈️'
+        return { emoji: '⛈️', shortname: '' }
+
       case '11n':
-        return '⛈️'
+        return { emoji: '⛈️', shortname: '' }
+
       case '13d':
-        return '🌨️'
+        return { emoji: '🌨️', shortname: '' }
+
       case '13n':
-        return '🌨️'
+        return { emoji: '🌨️', shortname: '' }
+
       case '50d':
-        return '🌫️'
+        return { emoji: '🌫️', shortname: 'fog' }
+
       case '50n':
-        return '🌫️'
+        return { emoji: '🌫️', shortname: 'fog' }
+
       default:
-        return '🌵'
+        return { emoji: '🌵', shortshortname: '' }
     }
   }
   UserModel.updateAllUsersStatus = () => {
@@ -137,13 +154,13 @@ module.exports = function (UserModel) {
       .then(updateObjects => {
         Promise.all(
           updateObjects.map(updateObject => {
-            let user = updateObject.user
-            let baseUsername = _.isNil(user.baseUsername)
+            const user = updateObject.user
+            const baseUsername = _.isNil(user.baseUsername)
               ? ''
               : user.baseUsername
-            let name =
-              baseUsername +
-              UserModel.weatherIconToEmoji(updateObject.weather.icon)
+            const {shortname, emoji} = UserModel.weatherIconToEmoji(updateObject.weather.icon)
+            let name = baseUsername + emoji
+            user.updateAttributes({ emoji: shortname })
             user.identities((err, identity) => {
               if (err) {
                 console.log(err)

@@ -6,6 +6,9 @@
     "baseUsername": {
       "type": "string"
     },
+    "emoji": {
+      "type": "string"
+    },
     "cityId": {
       "type": "number"
     },
