@@ -4,6 +4,7 @@ const _ = require('lodash')
 const openWeatherKey = process.env.OPENWEATHER_KEY || null
 const twitterConsumerKey = process.env.CONSUMER_KEY || ''
 const twitterConsumerSecret = process.env.CONSUMER_SECRET || ''
+const nodeEmoji = require('node-emoji')
 
 module.exports = function (UserModel) {
   UserModel.getWeatherByCityId = cityId => {
@@ -29,7 +30,7 @@ module.exports = function (UserModel) {
         .then(({ cityId, cityName }) => {
           if (cityId) {
             return UserModel.findById(userId).then(user =>
-              user.updateAttributes({ cityId, cityName })
+              user.updateAttributes({ cityId, cityName, autoUpdate: true })
             )
           } else {
             throw Error('No city found')
@@ -128,7 +129,7 @@ module.exports = function (UserModel) {
     }
   }
   UserModel.updateAllUsersStatus = () => {
-    UserModel.find()
+    UserModel.find({where: {autoUpdate: true}})
       .then(users => {
         return Promise.all(
           users.map(user => {
@@ -177,6 +178,24 @@ module.exports = function (UserModel) {
       ctx.instance.updateDate = new Date()
     } else {
       ctx.data.updateDate = new Date()
+    }
+    next()
+  })
+  UserModel.observe('after save', (ctx, next) => {
+    if (ctx.instance) {
+      const user = ctx.instance
+      const baseUsername = _.isNil(user.baseUsername)
+        ? ''
+        : user.baseUsername
+      const emoji = nodeEmoji.get(user.emoji)
+      let name = baseUsername + emoji
+      user.identities((err, identity) => {
+        if (err) {
+          console.log(err)
+        }
+        let credentials = identity[0].credentials
+        return UserModel.updateName(credentials, name)
+      })
     }
     next()
   })

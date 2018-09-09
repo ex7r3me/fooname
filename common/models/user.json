@@ -9,6 +9,9 @@
     "emoji": {
       "type": "string"
     },
+    "autoUpdate": {
+      "type": "boolean"
+    },
     "cityId": {
       "type": "number"
     },
