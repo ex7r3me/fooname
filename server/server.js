@@ -3,17 +3,18 @@
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
 'use strict'
-var loopback = require('loopback')
-var boot = require('loopback-boot')
-var app = module.exports = loopback()
-var cookieParser = require('cookie-parser')
-var session = require('express-session')
-var flash = require('express-flash')
+let loopback = require('loopback')
+let boot = require('loopback-boot')
+let app = module.exports = loopback()
+let cookieParser = require('cookie-parser')
+let session = require('express-session')
+let flash = require('express-flash')
 let utils = require('loopback-component-passport/lib/models/utils')
 let bodyParser = require('body-parser')
-var loopbackPassport = require('loopback-component-passport')
-var PassportConfigurator = loopbackPassport.PassportConfigurator
-var passportConfigurator = new PassportConfigurator(app)
+let loopbackPassport = require('loopback-component-passport')
+let PassportConfigurator = loopbackPassport.PassportConfigurator
+let passportConfigurator = new PassportConfigurator(app)
+let _ = require('lodash')
 
 // Build the providers/passport config
 let config = {}
@@ -52,7 +53,11 @@ function customProfileToUser (provider, profile) {
     email: `${profile.username}@${provider}.fooname.ga`,
     username: provider + '.' + profile.username,
     baseUsername: profile.displayName,
-    password: utils.generateKey('password')
+    password: utils.generateKey('password'),
+    bio: _.get(profile, '_json.description', null),
+    handle: _.get(profile, '_json.screen_name', null),
+    profileImage: _.get(profile, '_json.profile_image_url_https', null),
+    bannerImage: _.get(profile, '_json.profile_banner_url', null)
   }
   return userObject
 }
@@ -63,6 +68,7 @@ boot(app, __dirname, function (err) {
 })
 app.middleware('session:before', cookieParser('yourSecretKeyForCookies'))
 app.middleware('session', session({
+  // Todo Change this secret key for release
   secret: 'kitty',
   saveUninitialized: true,
   resave: true

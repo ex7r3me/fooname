@@ -6,6 +6,12 @@
     "baseUsername": {
       "type": "string"
     },
+    "handle" :{
+      "type": "string"
+    },
+    "bio": {
+      "type": "string"
+    },
     "emoji": {
       "type": "string"
     },
@@ -16,6 +22,12 @@
       "type": "number"
     },
     "cityName": {
+      "type": "string"
+    },
+    "profileImage": {
+      "type": "string"
+    },
+    "bannerImage": {
       "type": "string"
     },
     "createDate": {

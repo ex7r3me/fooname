@@ -187,14 +187,16 @@ module.exports = function (UserModel) {
       const baseUsername = _.isNil(user.baseUsername)
         ? ''
         : user.baseUsername
-      const emoji = nodeEmoji.get(user.emoji)
-      let name = baseUsername + emoji
+      const emoji = user.emoji ? nodeEmoji.get(user.emoji) : ''
+      const name = baseUsername + emoji
       user.identities((err, identity) => {
         if (err) {
           console.log(err)
         }
-        let credentials = identity[0].credentials
-        return UserModel.updateName(credentials, name)
+        if (identity.length > 0) {
+          const credentials = identity[0].credentials
+          return UserModel.updateName(credentials, name)
+        }
       })
     }
     next()
